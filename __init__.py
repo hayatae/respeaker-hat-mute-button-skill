@@ -38,6 +38,10 @@ class RespeakerHatMuteButton(MycroftSkill):
                 self.bus.emit(Message('mycroft.mic.mute'))
                 self.log.info("Muting microphone.")
 
+    def shutdown(self):
+        if pi_interface:
+            GPIO.cleanup()
+
 
 def create_skill():
     return RespeakerHatMuteButton()
