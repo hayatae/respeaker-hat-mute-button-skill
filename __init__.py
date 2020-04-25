@@ -46,10 +46,12 @@ class RespeakerHatMuteButton(MycroftSkill):
                 self.isMuted = False
                 self.bus.emit(Message('mycroft.mic.unmute'))
                 self.log.info("Unmuting microphone.")
+                self.speak_dialog('Unmuted')
             else:
                 self.isMuted = True
                 self.bus.emit(Message('mycroft.mic.mute'))
                 self.log.info("Muting microphone.")
+                self.speak_dialog('Muted')
 
     def shutdown(self):
         if pi_interface:
