@@ -18,8 +18,10 @@ class RespeakerHatMuteButton(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
         self.isMuted = False
+        self.isButtonPressed = False
         if pi_interface:
             self.log.info("Pi GPIO interface installed. Binding to button.")
+            GPIO.cleanup()
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(RESPEAKER_BUTTON, GPIO.IN)
             GPIO.add_event_detect(
@@ -28,7 +30,18 @@ class RespeakerHatMuteButton(MycroftSkill):
             self.log.info("Pi GPIO interface is not installed.")
 
     def mute_button_handler(self, channel):
+        previousState = self.isButtonPressed
+
         if GPIO.input(channel) == GPIO.HIGH:
+            # released
+            if self.isButtonPressed:
+                self.isButtonPressed = False
+        else:
+            # pressed
+            if not self.isButtonPressed:
+                self.isButtonPressed = True
+
+        if self.isButtonPressed == False and previousState == True:
             if self.isMuted:
                 self.isMuted = False
                 self.bus.emit(Message('mycroft.mic.unmute'))
