@@ -1,2 +1,2 @@
-GPIO
+RPi.GPIO
 mycroft-messagebus-client
