@@ -19,10 +19,13 @@ class RespeakerHatMuteButton(MycroftSkill):
         MycroftSkill.__init__(self)
         self.isMuted = False
         if pi_interface:
+            self.log.info("Pi GPIO interface installed. Binding to button.")
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(RESPEAKER_BUTTON, GPIO.IN)
             GPIO.add_event_detect(
                 RESPEAKER_BUTTON, GPIO.BOTH, mute_button_handler)
+        else:
+            self.log.info("Pi GPIO interface is not installed.")
 
     def mute_button_handler(self, channel):
         if GPIO.input(channel) == GPIO.HIGH:
